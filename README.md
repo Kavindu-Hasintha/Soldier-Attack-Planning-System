@@ -1,2 +1,2 @@
-## Soldier Attack Planning System
-# Expert System
+# Soldier Attack Planning System
+## Expert System

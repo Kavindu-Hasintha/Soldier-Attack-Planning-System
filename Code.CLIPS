@@ -1,0 +1,106 @@
+(defrule ask-for-know-the-enemy-location
+  (not (location-need))
+  =>
+  (printout t "Do you know the enemy location? (yes/no): ")
+  (bind ?need-location (read))
+  (assert (need-location ?need-location)))
+
+(defrule need-location-no
+  (need-location no)
+  =>
+  (printout t "You can't attack." crlf)
+  (assert (no-information-for-attack))
+  (halt))
+
+(defrule ask-for-attack-from-air
+  (need-location yes)
+  (not (attack-from-air))
+  =>
+  (printout t "Is it possible to attack from air? (yes/no): ")
+  (bind ?attack-from-air (read))
+  (assert (attack-from-air ?attack-from-air)))
+
+(defrule can-attack-from-air
+  (need-location yes)
+  (attack-from-air yes)
+  =>
+  (printout t "You can send helicopters to attack." crlf)
+  (assert (can-attack-from-air))
+  (halt))
+
+(defrule ask-for-attack-from-sea
+  (need-location yes)
+  (attack-from-air no)
+  (not (attack-from-sea))
+  =>
+  (printout t "Is it possible to attack from sea? (yes/no): ")
+  (bind ?attack-from-sea (read))
+  (assert (attack-from-sea ?attack-from-sea)))
+
+
+(defrule can-attack-from-sea
+  (need-location yes)
+  (attack-from-air no)
+  (attack-from-sea yes)
+  =>
+  (printout t "You can send navy ships to attack." crlf)
+  (assert (can-attack-from-sea))
+   (halt))
+
+(defrule ask-for-attack-using-tanks
+  (need-location yes)
+  (attack-from-air no)
+  (attack-from-sea no)
+  (not (attack-from-tanks))
+  =>
+  (printout t "Is it possible to attack using tanks? (yes/no): ")
+  (bind ?attack-from-tanks (read))
+  (assert (attack-from-tanks ?attack-from-tanks)))
+
+
+(defrule can-attack-from-tanks
+  (need-location yes)
+  (attack-from-air no)
+  (attack-from-sea no)
+  (attack-from-tanks yes)
+  =>
+  (printout t "You can send tanks to attack." crlf)
+  (assert (can-attack-from-tanks))
+  (halt))
+
+
+(defrule ask-for-attack-using-troops
+  (need-location yes)
+  (attack-from-air no)
+  (attack-from-sea no)
+  (attack-from-tanks no)
+  (not (attack-from-troops))
+  =>
+  (printout t "Is it possible to attack using ground troops? (yes/no): ")
+  (bind ?attack-from-troops (read))
+  (assert (attack-from-troops ?attack-from-troops)))
+
+
+
+(defrule can-attack-from-troops
+  (need-location yes)
+  (attack-from-air no)
+  (attack-from-sea no)
+  (attack-from-tanks no)
+  (attack-from-troops yes)
+  =>
+  (printout t "You can send ground troops to attack." crlf)
+  (assert (can-attack-from-troops))
+  (halt))
+
+
+(defrule can-not-attack
+  (need-location yes)
+  (attack-from-air no)
+  (attack-from-sea no)
+  (attack-from-tanks no)
+  (attack-from-troops no)
+  =>
+  (printout t "You can't attack to the enemy". crlf)
+  (assert (can-attack-from-troops))
+  (halt))
